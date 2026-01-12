@@ -13,22 +13,23 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate()
-    {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 movement = new Vector3(horizontal, 0f, vertical);
-        if (moveDirection != Vector3.zero)
 {
-    Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-    transform.rotation = Quaternion.Slerp(
-        transform.rotation,
-        targetRotation,
-        rotationSpeed * Time.deltaTime
-    );
+    float horizontal = Input.GetAxis("Horizontal");
+    float vertical = Input.GetAxis("Vertical");
+
+    Vector3 movement = new Vector3(horizontal, 0f, vertical);
+
+    if (movement != Vector3.zero)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(movement);
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
+    }
+
+    rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
 }
 
-
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
-    }
 }
