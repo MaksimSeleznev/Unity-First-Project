@@ -3,8 +3,13 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float rotationSpeed = 10f;
-
     public float speed = 5f;
+
+    public float minX = -5f;
+    public float maxX = 5f;
+    public float minZ = -5f;
+    public float maxZ = 5f;
+
     private Rigidbody rb;
 
     void Start()
@@ -29,7 +34,14 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-    rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+    Vector3 targetPosition =
+    rb.position + movement * speed * Time.fixedDeltaTime;
+
+targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
+targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
+
+rb.MovePosition(targetPosition);
+
 }
 
 }
