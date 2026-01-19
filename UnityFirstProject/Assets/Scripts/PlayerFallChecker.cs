@@ -17,11 +17,21 @@ public class PlayerFallChecker : MonoBehaviour
     }
 
     void Die()
+{
+    isDead = true;
+
+    PlayerMovement movement =
+        GetComponent<PlayerMovement>();
+
+    if (movement != null)
     {
-        isDead = true;
-        SceneManager.LoadScene(
-            SceneManager.GetActiveScene().buildIndex
-        );
+        movement.canMove = false;
     }
+
+    SceneManager.LoadScene(
+        SceneManager.GetActiveScene().buildIndex
+    );
+}
+
 }
 

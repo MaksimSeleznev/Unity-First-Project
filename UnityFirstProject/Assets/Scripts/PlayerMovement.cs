@@ -4,6 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float rotationSpeed = 10f;
     public float speed = 5f;
+    public bool canMove = true;
+
 
     public float minX = -5f;
     public float maxX = 5f;
@@ -19,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
 {
+    if (!canMove) return;
     float horizontal = Input.GetAxis("Horizontal");
     float vertical = Input.GetAxis("Vertical");
 
