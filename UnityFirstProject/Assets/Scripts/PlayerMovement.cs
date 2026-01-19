@@ -2,8 +2,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float rotationSpeed = 10f;
-    public float speed = 5f;
+    [Header("Movement")]
+    public float moveForce = 20f;
+    public float maxSpeed = 6f;
+    public float turnSpeed = 10f;
+
+    [Header("Drag")]
+    public float groundDrag = 5f;
+
+
+    
     public bool canMove = true;
 
 
@@ -17,33 +25,41 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        rb.drag = groundDrag;
+        rb.freezeRotation = true;
+
     }
 
     void FixedUpdate()
 {
     if (!canMove) return;
+
     float horizontal = Input.GetAxis("Horizontal");
     float vertical = Input.GetAxis("Vertical");
 
-    Vector3 movement = new Vector3(horizontal, 0f, vertical);
+    Vector3 inputDirection = new Vector3(horizontal, 0f, vertical).normalized;
 
-    if (movement != Vector3.zero)
-    {
-        Quaternion targetRotation = Quaternion.LookRotation(movement);
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotationSpeed * Time.deltaTime
-        );
-    }
+    if (rb.velocity.magnitude < maxSpeed)
+{
+    rb.AddForce(inputDirection * moveForce, ForceMode.Acceleration);
+    if (inputDirection != Vector3.zero)
+{
+    Quaternion targetRotation =
+        Quaternion.LookRotation(inputDirection);
 
-    Vector3 targetPosition =
-    rb.position + movement * speed * Time.fixedDeltaTime;
+    transform.rotation = Quaternion.Slerp(
+        transform.rotation,
+        targetRotation,
+        turnSpeed * Time.fixedDeltaTime
+    );
+}
 
-targetPosition.x = Mathf.Clamp(targetPosition.x, minX, maxX);
-targetPosition.z = Mathf.Clamp(targetPosition.z, minZ, maxZ);
+}
 
-rb.MovePosition(targetPosition);
+
+
+    
 
 }
 
